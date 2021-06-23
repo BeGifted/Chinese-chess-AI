@@ -17,6 +17,7 @@ com.init = function (stype){
 	com.ct				=	com.canvas.getContext("2d") ; 
 	com.canvas.width	=	com.width;
 	com.canvas.height	=	com.height;
+	com.cho             =   1;                  //对战人数
 	
 	com.childList		=	com.childList||[];
 	
@@ -37,7 +38,7 @@ com.stype = {
 }
 //获取ID
 com.get = function (id){
-	return document.getElementById(id)
+	return document.getElementById(id);
 }
 
 com.sleep = function (millisecond) {
@@ -72,31 +73,34 @@ window.onload = function(){
 	//人机对战
 	com.get("PVE").addEventListener("click", function(e) {
 		if (confirm("确认开始人机对弈？")){	
+			com.cho = 1;
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
 			play.depth = 4;
-			play.init();
+			play.init(1);
 		}
 	})
 	//人人对战
 	com.get("PVP").addEventListener("click", function(e) {
 		if (confirm("确认开始人人对弈？")){
+			com.cho = 2;
+			play.init(2);
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
-			play.depth = 4;
-			play.init();
+			play2.init();
 		}
 	})
 	//机机对战
 	com.get("EVE").addEventListener("click", function(e) {
 		if (confirm("确认开始机机对弈？")){;	
+			com.cho = 1;
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
 			play.depth = 4;
-			play.init();
+			play.init(1);
 			play.my = -1;
 			setTimeout("play.EVE()",500);
 		}
@@ -459,7 +463,7 @@ com.bylaw.p = function (x,y,map,my){
 				continue;
 			}else{
 				if (com.mans[map[y][i]].my!=my) d.push([i,y]);
-				break	
+				break;
 			}
 		}else{
 			if(n==0) d.push([i,y])	
@@ -664,7 +668,7 @@ com.args={
 	'p':{text:"炮", img:'r_p', my:1 ,bl:"p", value:com.value.p},
 	'z':{text:"兵", img:'r_z', my:1 ,bl:"z", value:com.value.z},
 	
-	//蓝子
+	//黑子
 	'C':{text:"車", img:'b_c', my:-1 ,bl:"c", value:com.value.C},
 	'M':{text:"馬", img:'b_m', my:-1 ,bl:"m", value:com.value.M},
 	'X':{text:"象", img:'b_x', my:-1 ,bl:"x", value:com.value.X},
@@ -698,8 +702,10 @@ com.class.Man = function (key, x, y){
 	}
 	
 	this.bl = function (map){
-		var map = map || play.map
-		return com.bylaw[o.bl](this.x,this.y,map,this.my)
+		var map;
+		if(com.cho == 1) map = map || play.map;
+		else map = map || play2.map;
+		return com.bylaw[o.bl](this.x,this.y,map,this.my);
 	}
 }
 

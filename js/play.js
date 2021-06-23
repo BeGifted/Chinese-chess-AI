@@ -1,6 +1,6 @@
 ﻿var play = play||{};
 
-play.init = function (){
+play.init = function (x){
 	play.my				=	1;				//玩家方
 	play.map 			=	com.arr2Clone (com.initMap);		//初始化棋盘
 	play.nowManKey		=	false;			//现在要操作的棋子
@@ -30,8 +30,6 @@ play.init = function (){
 	}
 	play.show();
 	
-	//绑定点击事件
-	com.canvas.addEventListener("click",play.clickCanvas);
 	/*
 	com.get("offensivePlay").addEventListener("click", function(e) {
 		play.isOffensive=true;
@@ -48,11 +46,17 @@ play.init = function (){
 	})
 	*/
 	
-	
+	//取消pvp
+    com.canvas.removeEventListener("click",play2.clickCanvas);
+    com.get("regretBn").removeEventListener("click", function(e) {
+        play2.regret();
+    });
+
+	//绑定点击事件
+	com.canvas.addEventListener("click",play.clickCanvas);	
 	com.get("regretBn").addEventListener("click", function(e) {
 		play.regret();
 	});
-	
 }
 
 //悔棋
@@ -272,6 +276,7 @@ play.getClickPoint = function (e){
 	var domXY = com.getDomXY(com.canvas);
 	var x=Math.round((e.pageX-domXY.x-com.pointStartX-20)/com.spaceX)
 	var y=Math.round((e.pageY-domXY.y-com.pointStartY-20)/com.spaceY)
+	//console.log(x, y);
 	return {"x":x,"y":y}
 }
 
@@ -280,6 +285,7 @@ play.getClickMan = function (e){
 	var clickXY=play.getClickPoint(e);
 	var x=clickXY.x;
 	var y=clickXY.y;
+	//console.log(x, y);
 	if (x < 0 || x > 8 || y < 0 || y > 9) return false;
 	return (play.map[y][x] && play.map[y][x]!="0") ? play.map[y][x] : false;
 }

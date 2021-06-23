@@ -5,7 +5,7 @@ bill.init = function (){
 	if (com.store){
 		clearInterval(bill.timer);
 		bill.setBillList(com.arr2Clone(com.initMap)); //写入棋谱列表
-		play.isPlay=false;	
+		play2.isPlay=false;	
 		com.show();
 	}else {
 		bill.timer = setInterval("bill.init()",300);	

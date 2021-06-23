@@ -24,12 +24,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	align-items: center;
+	/* align-items: center; */
 	/* border: 1px solid red; */
 }
 .move_info {
 	align-self: flex-start;
-	/* border: 1px solid red; */
+	width: 150px;
 }
 .steps {
 	margin-top:20px;
