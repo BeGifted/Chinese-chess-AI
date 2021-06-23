@@ -2,7 +2,7 @@
 
 com.init = function (stype){
 	
-	com.nowStype= stype || com.getCookie("stype") ||"stype1";
+	com.nowStype= stype || com.getCookie("stype") ||"stype";
 	var stype = com.stype[com.nowStype];
 	com.width			=	stype.width;		//画布宽度
 	com.height			=	stype.height; 		//画布高度
@@ -27,24 +27,15 @@ com.init = function (stype){
 
 //样式
 com.stype = {
-	stype1:{
+	stype:{
 		width:325,		//画布宽度
 		height:402, 		//画布高度
 		spaceX:35,		//着点X跨度
 		spaceY:36,		//着点Y跨度
 		pointStartX:5,		//第一个着点X坐标;
 		pointStartY:19,		//第一个着点Y坐标;
-		page:"stype_1"	//图片目录
+		page:"stype"	//图片目录
 	},
-	stype2:{
-		width:530,		//画布宽度
-		height:567, 		//画布高度
-		spaceX:57,		//着点X跨度
-		spaceY:57,		//着点Y跨度
-		pointStartX:-2,		//第一个着点X坐标;
-		pointStartY:0,		//第一个着点Y坐标;
-		page:"stype_2"	//图片目录
-	}		
 }
 //获取ID
 com.get = function (id){
@@ -63,6 +54,7 @@ window.onload = function(){
 	com.bg.show();
 	com.get("bnBox").style.display = "block";
 	//play.init();
+
 	com.get("billBn").addEventListener("click", function(e) {
 		if (confirm("是否结束对局，开始棋局研究？")){
 			com.init();
@@ -71,8 +63,9 @@ window.onload = function(){
 			bill.init();
 		}
 	})
-	com.get("superPlay").addEventListener("click", function(e) {
-		if (confirm("确认开始大师级对弈？")){
+	//人机对战
+	com.get("PVE").addEventListener("click", function(e) {
+		if (confirm("确认开始人机对弈？")){
 			play.isPlay=true ;	
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
@@ -81,32 +74,31 @@ window.onload = function(){
 			play.init();
 		}
 	})
-	com.get("tyroPlay").addEventListener("click", function(e) {
-		if (confirm("确认开始新手级对弈？")){
-			play.isPlay=true ;	
+	//人人对战
+	com.get("PVP").addEventListener("click", function(e) {
+		if (confirm("确认开始人人对弈？")){
+			play.isPlay=true;	
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML="";
-			play.depth = 3;
+			play.depth = 4;
 			play.init();
 		}
 	})
-	
-	com.get("stypeBn").addEventListener("click", function(e) {
-		var stype =com.nowStype;
-		if (stype=="stype1") stype="stype2";
-		else if (stype=="stype2") stype="stype1";
-		com.init(stype);
-		com.show();
-		play.depth = 4;
-		play.init();
-		document.cookie="stype=" +stype;
-		clearInterval(timer);
-		var i=0;
-		var timer = setInterval(function (){
-			com.show();
-			if (i++>=5) clearInterval(timer);
-		},2000);
+	//机机对战
+	com.get("EVE").addEventListener("click", function(e) {
+		if (confirm("确认开始机机对弈？")){
+			// play.isPlay=true ;	
+			com.get("chessRight").style.display = "none";
+			com.get("moveInfo").style.display = "block";
+			com.get("moveInfo").innerHTML="";
+			// play.depth = 4;
+			play.init();
+
+			clearInterval(play.timer);
+			play.timer = setInterval("play.AIPlay()",1000);
+			play.AIPlay();
+		}
 	})
 	
 	com.getData("js/gambit.all.js",
@@ -125,24 +117,24 @@ com.loadImages = function(stype){
 	
 	//绘制棋盘
 	com.bgImg = new Image();
-	com.bgImg.src  = "img/"+stype+"/bg.png";
+	com.bgImg.src  = "img/stype/bg.png";
 	
 	//提示点
 	com.dotImg = new Image();
-	com.dotImg.src  = "img/"+stype+"/dot.png";
+	com.dotImg.src  = "img/stype/dot.png";
 	
 	//棋子
 	for (var i in com.args){
 		com[i] = {};
 		com[i].img = new Image();
-		com[i].img.src = "img/"+stype+"/"+ com.args[i].img +".png";
+		com[i].img.src = "img/stype/" + com.args[i].img +".png";
 	}
 	
 	//棋子外框
 	com.paneImg = new Image();
-	com.paneImg.src  = "img/"+stype+"/r_box.png";
+	com.paneImg.src  = "img/stype/r_box.png";
 	
-	document.getElementsByTagName("body")[0].style.background= "url(img/"+stype+"/bg.jpg)";
+	document.getElementsByTagName("body")[0].style.background= "url(img/stype/bg.jpg)";
 	
 }
 

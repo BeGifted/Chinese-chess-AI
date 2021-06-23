@@ -12,7 +12,6 @@ bill.init = function (){
 	}
 }
 
-
 //把所有棋谱写入棋谱列表
 bill.setBillList = function (map){
 	var list=com.get("billList")
