@@ -11,7 +11,6 @@ com.init = function (stype){
 	com.pointStartX		=	stype.pointStartX;	//第一个着点X坐标;
 	com.pointStartY		=	stype.pointStartY;	//第一个着点Y坐标;
 	com.page			=	stype.page;			//图片目录
-	
 	com.get("box").style.width = com.width+130+"px";
 	
 	com.canvas			=	document.getElementById("chess"); //画布
@@ -22,7 +21,6 @@ com.init = function (stype){
 	com.childList		=	com.childList||[];
 	
 	com.loadImages(com.page);		//载入图片/图片目录
-	//z(com.initMap.join())
 }
 
 //样式
@@ -40,6 +38,14 @@ com.stype = {
 //获取ID
 com.get = function (id){
 	return document.getElementById(id)
+}
+
+com.sleep = function (millisecond) {
+	return new Promise(resolve => {
+		setTimeout(() => {
+			resolve()
+		}, millisecond)
+	})
 }
 
 window.onload = function(){  
@@ -65,11 +71,10 @@ window.onload = function(){
 	})
 	//人机对战
 	com.get("PVE").addEventListener("click", function(e) {
-		if (confirm("确认开始人机对弈？")){
-			play.isPlay=true ;	
+		if (confirm("确认开始人机对弈？")){	
 			com.get("chessRight").style.display = "none";
-			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML="";
+			com.get("info").innerHTML="";
 			play.depth = 4;
 			play.init();
 		}
@@ -77,27 +82,23 @@ window.onload = function(){
 	//人人对战
 	com.get("PVP").addEventListener("click", function(e) {
 		if (confirm("确认开始人人对弈？")){
-			play.isPlay=true;	
 			com.get("chessRight").style.display = "none";
-			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML="";
+			com.get("info").innerHTML="";
 			play.depth = 4;
 			play.init();
 		}
 	})
 	//机机对战
 	com.get("EVE").addEventListener("click", function(e) {
-		if (confirm("确认开始机机对弈？")){
-			// play.isPlay=true ;	
+		if (confirm("确认开始机机对弈？")){;	
 			com.get("chessRight").style.display = "none";
-			com.get("moveInfo").style.display = "block";
 			com.get("moveInfo").innerHTML="";
-			// play.depth = 4;
+			com.get("info").innerHTML="";
+			play.depth = 4;
 			play.init();
-
-			clearInterval(play.timer);
-			play.timer = setInterval("play.AIPlay()",1000);
-			play.AIPlay();
+			play.my = -1;
+			setTimeout("play.EVE()",500);
 		}
 	})
 	
@@ -114,7 +115,6 @@ window.onload = function(){
 
 //载入图片
 com.loadImages = function(stype){
-	
 	//绘制棋盘
 	com.bgImg = new Image();
 	com.bgImg.src  = "img/stype/bg.png";
@@ -169,22 +169,6 @@ com.createMans = function(map){
 		}
 	}
 }
-
-
-//debug alert
-com.alert = function (obj,f,n){
-	if (typeof obj !== "object") {
-		try{console.log(obj)} catch (e){}
-		//return alert(obj);
-	}
-	var arr = [];
-	for (var i in obj) arr.push(i+" = "+obj[i]);
-	try{console.log(arr.join(n||"\n"))} catch (e){}
-	//return alert(arr.join(n||"\n\r"));
-}
-
-//com.alert的简写，考虑z变量名最不常用
-var z = com.alert;
 
 //获取元素距离页面左侧的距离
 com.getDomXY = function (dom){
@@ -246,51 +230,51 @@ com.getData = function (url,fun){
 com.createMove = function (map,x,y,newX,newY){
 	var h="";
 	var man = com.mans[map[y][x]];
-	h+= man.text;
+	h += man.text;
 	map[newY][newX] = map[y][x];
 	delete map[y][x];
 	if (man.my===1){
 		var mumTo=["一","二","三","四","五","六","七","八","九","十"];	
 		newX=8-newX;
-		h+= mumTo[8-x];
+		h += mumTo[8-x];
 		if (newY > y) {
 			h+= "退";
 			if (man.pater == "m" || man.pater == "s" || man.pater == "x"){
-				h+= mumTo[newX];
+				h += mumTo[newX];
 			}else {
-				h+= mumTo[newY - y -1];
+				h += mumTo[newY - y -1];
 			}
 		}else if (newY < y) {
-			h+= "进";
+			h += "进";
 			if (man.pater == "m" || man.pater == "s" || man.pater == "x"){
-				h+= mumTo[newX];
+				h += mumTo[newX];
 			}else {
-				h+= mumTo[y - newY -1];
+				h += mumTo[y - newY -1];
 			}
 		}else {
-			h+= "平";
-			h+= mumTo[newX];
+			h += "平";
+			h += mumTo[newX];
 		}
 	}else{
 		var mumTo=["１","２","３","４","５","６","７","８","９","10"];
 		h+= mumTo[x];
 		if (newY > y) {
-			h+= "进";
+			h += "进";
 			if (man.pater == "M" || man.pater == "S" || man.pater == "X"){
-				h+= mumTo[newX];
+				h += mumTo[newX];
 			}else {
-				h+= mumTo[newY - y-1];
+				h += mumTo[newY - y-1];
 			}
 		}else if (newY < y) {
-			h+= "退";
+			h += "退";
 			if (man.pater == "M" || man.pater == "S" || man.pater == "X"){
-				h+= mumTo[newX];
+				h += mumTo[newX];
 			}else {
-				h+= mumTo[y - newY-1];
+				h += mumTo[y - newY-1];
 			}
 		}else {
-			h+= "平";
-			h+= mumTo[newX];
+			h += "平";
+			h += mumTo[newX];
 		}
 	}
 	return h;
@@ -308,52 +292,6 @@ com.initMap = [
 	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
 	['c0','m0','x0','s0','j0','s1','x1','m1','c1']
 ];
-
-
-
-com.initMap1 = [
-	[    ,    ,    ,, "J0"   ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,"c0",    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,	  ,    ,    ,    ],
-	[    ,    ,    ,    ,"s0",    ,    ,"C0",    ],
-	[    ,    ,    ,"s1",    ,"j0",    ,    ,    ]
-];
-
-com.initMap1 = [
-	[    ,    ,    ,, "J0"   ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    , ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,"z0",    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,	  ,    ,    ,    ],
-	[    ,    ,    ,    ,    ,    ,    ,    ,    ],
-	[    ,    ,    , "j0"   ,,    ,    ,    ]
-];
-
-com.keys = {
-	"c0":"c","c1":"c",
-	"m0":"m","m1":"m",
-	"x0":"x","x1":"x",
-	"s0":"s","s1":"s",
-	"j0":"j",
-	"p0":"p","p1":"p",
-	"z0":"z","z1":"z","z2":"z","z3":"z","z4":"z","z5":"z",
-	
-	"C0":"c","C1":"C",
-	"M0":"M","M1":"M",
-	"X0":"X","X1":"X",
-	"S0":"S","S1":"S",
-	"J0":"J",
-	"P0":"P","P1":"P",
-	"Z0":"Z","Z1":"Z","Z2":"Z","Z3":"Z","Z4":"Z","Z5":"Z",
-}
 
 //棋子能走的着点
 com.bylaw ={}

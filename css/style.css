@@ -6,18 +6,39 @@ body {
 	margin:0 auto;
 	width:460px;
 	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 .chess_left {
 	float:left;
-	text-align:center
+	text-align:center;
 }
-.chess_right {
+.chess {
 	float:left;
-	display:none
+	display:none;
+}
+.chess_right{
+	height: 360px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	/* border: 1px solid red; */
 }
 .move_info {
-	float:left;
-	margin-top:20px
+	align-self: flex-start;
+	/* border: 1px solid red; */
+}
+.steps {
+	margin-top:20px;
+	height: 50px;
+}
+#info{
+	width: 90px;
+	height: 200px;
+	overflow-y: scroll;
 }
 .bill_box {
 	height: 320px;

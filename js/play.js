@@ -1,7 +1,6 @@
 ﻿var play = play||{};
 
 play.init = function (){
-	
 	play.my				=	1;				//玩家方
 	play.map 			=	com.arr2Clone (com.initMap);		//初始化棋盘
 	play.nowManKey		=	false;			//现在要操作的棋子
@@ -13,10 +12,8 @@ play.init = function (){
 	play.showPane 		= 	com.showPane;
 	play.isOffensive	=	true;			//是否先手
 	play.depth			=	play.depth || 3;				//搜索深度
-	
+	play.flag           =   false;          //是否结束EVE
 	play.isFoul			=	false;	//是否犯规长将
-	
-	
 	
 	com.pane.isShow		=	 false;			//隐藏方块
 	
@@ -34,13 +31,7 @@ play.init = function (){
 	play.show();
 	
 	//绑定点击事件
-	com.canvas.addEventListener("click",play.clickCanvas)
-	//clearInterval(play.timer);
-	//com.get("autoPlay").addEventListener("click", function(e) {
-		//clearInterval(play.timer);
-		//play.timer = setInterval("play.AIPlay()",1000);
-	//	play.AIPlay()
-	//})
+	com.canvas.addEventListener("click",play.clickCanvas);
 	/*
 	com.get("offensivePlay").addEventListener("click", function(e) {
 		play.isOffensive=true;
@@ -60,25 +51,9 @@ play.init = function (){
 	
 	com.get("regretBn").addEventListener("click", function(e) {
 		play.regret();
-	})
-	
-	/*
-	var initTime = new Date().getTime();
-	for (var i=0; i<=100000; i++){
-		
-		var h=""
-		var h=play.map.join();
-		//for (var n in play.mans){
-		//	if (play.mans[n].show) h+=play.mans[n].key+play.mans[n].x+play.mans[n].y
-		//}
-	}
-	var nowTime= new Date().getTime();
-	z([h,nowTime-initTime])
-	*/
+	});
 	
 }
-
-
 
 //悔棋
 play.regret = function (){
@@ -105,7 +80,6 @@ play.regret = function (){
 		var newX = parseInt(p[2], 10);
 		var newY = parseInt(p[3], 10);
 		var key=map[y][x];
-		//try{
 	 
 		var cMan=map[newY][newX];
 		if (cMan) com.mans[map[newY][newX]].isShow = false;
@@ -116,11 +90,6 @@ play.regret = function (){
 		if (i==pace.length-1){
 			com.showPane(newX ,newY,x,y)	
 		}
-		//} catch (e){
-		//	com.show()
-		//	z([key,p,pace,map])
-			
-		//	}
 	}
 	play.map = map;
 	play.my=1;
@@ -131,6 +100,7 @@ play.regret = function (){
 //点击棋盘事件
 play.clickCanvas = function (e){
 	if (!play.isPlay) return false;
+	play.my = 1;
 	var key = play.getClickMan(e);
 	var point = play.getClickPoint(e);
 	
@@ -154,20 +124,22 @@ play.clickMan = function (key,x,y){
 		if (play.indexOfPs(com.mans[play.nowManKey].ps,[x,y])){
 			man.isShow = false;
 			var pace=com.mans[play.nowManKey].x+""+com.mans[play.nowManKey].y
-			//z(bill.createMove(play.map,man.x,man.y,x,y))
 			delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
 			play.map[y][x] = play.nowManKey;
 			com.showPane(com.mans[play.nowManKey].x ,com.mans[play.nowManKey].y,x,y)
 			com.mans[play.nowManKey].x = x;
 			com.mans[play.nowManKey].y = y;
-			com.mans[play.nowManKey].alpha = 1
+			com.mans[play.nowManKey].alpha = 1;
+
+			var temp = com.get("info").textContent;
+			var move = com.createMove(com.arr2Clone(play.map),x,y,man.x,man.y);
+			com.get("info").innerHTML = temp + '\n' + '红：' + move;
 			
 			play.pace.push(pace+x+y);
 			play.nowManKey = false;
 			com.pane.isShow = false;
 			com.dot.dots = [];
-			com.show()
-			com.get("clickAudio").play();
+			com.show();
 			setTimeout("play.AIPlay()",500);
 			if (key == "j0") play.showWin (-1);
 			if (key == "J0") play.showWin (1);
@@ -182,8 +154,6 @@ play.clickMan = function (key,x,y){
 			com.mans[key].ps = com.mans[key].bl(); //获得所有能着点
 			com.dot.dots = com.mans[key].ps
 			com.show();
-			//com.get("selectAudio").start(0);
-			com.get("selectAudio").play();
 		}
 	}
 }
@@ -194,11 +164,15 @@ play.clickPoint = function (x,y){
 	var man=com.mans[key];
 	if (play.nowManKey){
 		if (play.indexOfPs(com.mans[key].ps,[x,y])){
-			var pace=man.x+""+man.y
-			//z(bill.createMove(play.map,man.x,man.y,x,y))
+			var temp = com.get("info").textContent;
+			var move = com.createMove(com.arr2Clone(play.map),man.x,man.y,x,y);
+			com.get("info").innerHTML = temp + '\n' + '红：' + move;
+
+			var pace=man.x+""+man.y;
 			delete play.map[man.y][man.x];
 			play.map[y][x] = key;
-			com.showPane(man.x ,man.y,x,y)
+			com.showPane(man.x,man.y,x,y);
+
 			man.x = x;
 			man.y = y;
 			man.alpha = 1;
@@ -206,19 +180,25 @@ play.clickPoint = function (x,y){
 			play.nowManKey = false;
 			com.dot.dots = [];
 			com.show();
-			com.get("clickAudio").play();
 			setTimeout("play.AIPlay()",500);
-		}else{
-			//alert("不能这么走哦！")	
 		}
 	}
-	
 }
 
-//Ai自动走棋
+//EVE
+play.EVE = function (){
+	while(!play.flag){
+		console.log(AI.move);
+		play.AIPlay();
+		//play.isPlay = !play.isPlay;
+	}
+	//clearInterval(play.timer);
+	play.isPlay = false;
+}
+
+//AI自动走棋
 play.AIPlay = function (){
-	//return
-	play.my = -1 ;
+	play.my = -play.my;
 	var pace=AI.init(play.pace.join(""))
 	if (!pace) {
 		play.showWin (1);
@@ -234,9 +214,6 @@ play.AIPlay = function (){
 	}else {
 		play.AIclickPoint(pace[2],pace[3]);	
 	}
-	com.get("clickAudio").play();
-	
-	
 }
 
 //检查是否长将
@@ -249,23 +226,20 @@ play.checkFoul = function(){
 	return false;
 }
 
-
-
 play.AIclickMan = function (key,x,y){
 	var man = com.mans[key];
 	//吃子
 	man.isShow = false;
 	delete play.map[com.mans[play.nowManKey].y][com.mans[play.nowManKey].x];
 	play.map[y][x] = play.nowManKey;
-	play.showPane(com.mans[play.nowManKey].x ,com.mans[play.nowManKey].y,x,y)
+	com.showPane(com.mans[play.nowManKey].x, com.mans[play.nowManKey].y,x,y)
 	
 	com.mans[play.nowManKey].x = x;
 	com.mans[play.nowManKey].y = y;
 	play.nowManKey = false;
-	
-	com.show()
-	if (key == "j0") play.showWin (-1);
-	if (key == "J0") play.showWin (1);
+	com.show();
+	if (key == "j0") play.showWin (-1);  //输
+	if (key == "J0") play.showWin (1);   //赢
 }
 
 play.AIclickPoint = function (x,y){
@@ -284,7 +258,6 @@ play.AIclickPoint = function (x,y){
 	}
 	com.show();
 }
-
 
 play.indexOfPs = function (ps,xy){
 	for (var i=0; i<ps.length; i++){
@@ -307,15 +280,16 @@ play.getClickMan = function (e){
 	var clickXY=play.getClickPoint(e);
 	var x=clickXY.x;
 	var y=clickXY.y;
-	if (x < 0 || x>8 || y < 0 || y > 9) return false;
+	if (x < 0 || x > 8 || y < 0 || y > 9) return false;
 	return (play.map[y][x] && play.map[y][x]!="0") ? play.map[y][x] : false;
 }
 
 play.showWin = function (my){
 	play.isPlay = false;
 	if (my===1){
-		alert("恭喜你，你赢了！");
+		alert("恭喜你你赢了🎉🎉🎉");
 	}else{
-		alert("很遗憾，你输了！");
+		alert("很遗憾你输了😢😢😢");
 	}
+	play.flag = true;
 }
