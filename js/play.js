@@ -16,7 +16,6 @@ play.init = function (x){
 	play.isFoul			=	false;	//是否犯规长将
 	
 	com.pane.isShow		=	 false;			//隐藏方块
-	
 	//初始化棋子
 	for (var i=0; i<play.map.length; i++){
 		for (var n=0; n<play.map[i].length; n++){
@@ -193,7 +192,7 @@ play.clickPoint = function (x,y){
 play.EVE = function (){
 	while(!play.flag){
 		console.log(AI.move);
-		play.AIPlay();
+		 play.AIPlay();
 		//play.isPlay = !play.isPlay;
 	}
 	//clearInterval(play.timer);
@@ -203,10 +202,9 @@ play.EVE = function (){
 //AI自动走棋
 play.AIPlay = function (){
 	play.my = -play.my;
-	var pace=AI.init(play.pace.join(""))
+	var pace=AI.init(play.pace.join(""));
 	if (!pace) {
 		play.showWin (1);
-		return ;
 	}
 	play.pace.push(pace.join(""));
 	var key=play.map[pace[1]][pace[0]]
@@ -297,5 +295,5 @@ play.showWin = function (my){
 	}else{
 		alert("很遗憾你输了😢😢😢");
 	}
-	play.flag = true;
+	play.flag=true;
 }

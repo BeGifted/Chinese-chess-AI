@@ -94,7 +94,7 @@ window.onload = function(){
 	})
 	//机机对战
 	com.get("EVE").addEventListener("click", function(e) {
-		if (confirm("确认开始机机对弈？")){;	
+		if (confirm("确认开始机机对弈？")){
 			com.cho = 1;
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
@@ -102,7 +102,9 @@ window.onload = function(){
 			play.depth = 4;
 			play.init(1);
 			play.my = -1;
-			setTimeout("play.EVE()",500);
+			if(!play.flag){
+				setInterval("play.AIPlay()", 500);
+			}
 		}
 	})
 	
