@@ -102,9 +102,14 @@ window.onload = function(){
 			play.depth = 4;
 			play.init(1);
 			play.my = -1;
-			if(!play.flag){
-				setInterval("play.AIPlay()", 500);
-			}
+			var timesRun = 0;
+			var interval = setInterval(function(){
+				timesRun+=1;
+				play.AIPlay();
+				if(timesRun === 77){
+					clearInterval(interval);
+				}
+			}, 500);
 		}
 	})
 	

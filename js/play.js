@@ -188,17 +188,6 @@ play.clickPoint = function (x,y){
 	}
 }
 
-//EVE
-play.EVE = function (){
-	while(!play.flag){
-		console.log(AI.move);
-		 play.AIPlay();
-		//play.isPlay = !play.isPlay;
-	}
-	//clearInterval(play.timer);
-	play.isPlay = false;
-}
-
 //AI自动走棋
 play.AIPlay = function (){
 	play.my = -play.my;
@@ -292,6 +281,7 @@ play.showWin = function (my){
 	play.isPlay = false;
 	if (my===1){
 		alert("恭喜你你赢了🎉🎉🎉");
+		return;
 	}else{
 		alert("很遗憾你输了😢😢😢");
 	}
