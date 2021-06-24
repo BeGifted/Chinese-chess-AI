@@ -1,7 +1,6 @@
 ﻿var com = com||{};
 
 com.init = function (stype){
-	
 	com.nowStype= stype || com.getCookie("stype") ||"stype";
 	var stype = com.stype[com.nowStype];
 	com.width			=	stype.width;		//画布宽度
@@ -28,11 +27,11 @@ com.init = function (stype){
 com.stype = {
 	stype:{
 		width:325,		//画布宽度
-		height:402, 		//画布高度
+		height:402, 	//画布高度
 		spaceX:35,		//着点X跨度
 		spaceY:36,		//着点Y跨度
-		pointStartX:5,		//第一个着点X坐标;
-		pointStartY:19,		//第一个着点Y坐标;
+		pointStartX:5,  //第一个着点X坐标;
+		pointStartY:19, //第一个着点Y坐标;
 		page:"stype"	//图片目录
 	},
 }
@@ -74,18 +73,22 @@ window.onload = function(){
 	com.get("PVE").addEventListener("click", function(e) {
 		if (confirm("确认开始人机对弈？")){	
 			com.cho = 1;
+			play.flag = true;
+			com.sleep(500);
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
 			play.depth = 4;
-			play.init(1);
+			play.init();
 		}
 	})
 	//人人对战
 	com.get("PVP").addEventListener("click", function(e) {
 		if (confirm("确认开始人人对弈？")){
 			com.cho = 2;
-			play.init(2);
+			play.flag = true;
+			com.sleep(500);
+			play.init();
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
@@ -99,25 +102,25 @@ window.onload = function(){
 			com.get("chessRight").style.display = "none";
 			com.get("moveInfo").innerHTML="";
 			com.get("info").innerHTML="";
-			play.depth = 4;
-			play.init(1);
+			play.depth = parseInt(Math.random()*2+3, 10);
+			play.init();
 			play.my = -1;
-			var timesRun = 0;
 			var interval = setInterval(function(){
-				timesRun+=1;
 				play.AIPlay();
-				if(timesRun === 77){
+				console.log(play.flag);
+				if(play.flag){
+					console.log(1);
 					clearInterval(interval);
 				}
 			}, 500);
 		}
 	})
 	
-	com.getData("js/gambit.all.js",
-		function(data){
-		com.gambit=data.split(" ");
-		AI.historyBill = com.gambit;
-	})
+	// com.getData("js/gambit.all.js",
+	// 	function(data){
+	// 	com.gambit=data.split(" ");
+	// 	AI.historyBill = com.gambit;
+	// })
 	com.getData("js/store.js",
 		function(data){
 		com.store=data.split(" ");

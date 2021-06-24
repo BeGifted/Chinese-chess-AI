@@ -5,30 +5,8 @@ AI.historyTable = {};		//历史表
 //人工智能初始化
 AI.init = function (pace) {
 	AI.move;
-	// if (play.my == -1) {
-	// 	var bill = AI.historyBill || com.gambit; //开局库
-	// 	if (bill.length) {
-	// 		var len = pace.length;
-	// 		var arr = [];
-	// 		//先搜索棋谱
-	// 		for (var i = 0; i < bill.length; i++) {
-	// 			if (bill[i].slice(0, len) == pace) {
-	// 				arr.push(bill[i]);
-	// 			}
-	// 		}
-	// 		if (arr.length) {
-	// 			var inx = Math.floor(Math.random() * arr.length);
-	// 			AI.historyBill = arr;
-	// 			return arr[inx].slice(len, len + 4).split("");
-	// 		} else {
-	// 			AI.historyBill = [];
-	// 		}
-	// 	}
-	// }
-	//如果棋谱里面没有，人工智能开始运作
 	var initTime = new Date().getTime();
-	AI.treeDepth = play.depth;
-	//AI.treeDepth=4;
+	AI.treeDepth = play.depth || 4;
 
 	AI.number = 0;
 	AI.setHistoryTable.lenght = 0;
@@ -215,27 +193,7 @@ AI.evaluate = function (map, my) {
 			}
 		}
 	}
-	//val+=Math.floor( Math.random() * 10);  //让AI走棋增加随机元素
-	//com.show()
-	//z(val*my)
+	val+=Math.floor(Math.random()*10);  //让AI走棋增加随机元素
 	AI.number++;
 	return val * my;
 }
-
-//评估棋局 取得棋盘双方棋子价值差
-AI.evaluate1 = function (map, my) {
-	var val = 0;
-	for (var i in play.mans) {
-		var man = play.mans[i];
-		if (man.isShow) {
-			val += man.value[man.y][man.x] * man.my;
-		}
-	}
-	//val+=Math.floor( Math.random() * 10);  //让AI走棋增加随机元素
-	//com.show()
-	//z(val*my)
-	AI.number++;
-	return val * my;
-}
-
-

@@ -3,11 +3,14 @@
 //初始化
 bill.init = function (){
 	if (com.store){
+		console.log("棋谱go");
 		clearInterval(bill.timer);
 		bill.setBillList(com.arr2Clone(com.initMap)); //写入棋谱列表
-		play2.isPlay=false;	
+		play2.isPlay=false;
+		play.isPlay=false;
 		com.show();
 	}else {
+		console.log("棋谱out");
 		bill.timer = setInterval("bill.init()",300);	
 	}
 }

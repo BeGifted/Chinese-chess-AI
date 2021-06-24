@@ -1,6 +1,6 @@
 ﻿var play = play||{};
 
-play.init = function (x){
+play.init = function (){
 	play.my				=	1;				//玩家方
 	play.map 			=	com.arr2Clone (com.initMap);		//初始化棋盘
 	play.nowManKey		=	false;			//现在要操作的棋子
@@ -15,7 +15,7 @@ play.init = function (x){
 	play.flag           =   false;          //是否结束EVE
 	play.isFoul			=	false;	//是否犯规长将
 	
-	com.pane.isShow		=	 false;			//隐藏方块
+	com.pane.isShow		=	false;			//隐藏方块
 	//初始化棋子
 	for (var i=0; i<play.map.length; i++){
 		for (var n=0; n<play.map[i].length; n++){
@@ -281,7 +281,6 @@ play.showWin = function (my){
 	play.isPlay = false;
 	if (my===1){
 		alert("恭喜你你赢了🎉🎉🎉");
-		return;
 	}else{
 		alert("很遗憾你输了😢😢😢");
 	}
