@@ -121,8 +121,9 @@ window.onload = function(){
 	// 	com.gambit=data.split(" ");
 	// 	AI.historyBill = com.gambit;
 	// })
-	com.getData("js/store.js",
+	com.getData("js/store.json",
 		function(data){
+		console.log("读取store");
 		com.store=data.split(" ");
 	})
 }
