@@ -1,4 +1,5 @@
 body {
+	background: url("../img/stype/bg.jpg");
 	font-size: 12px;
 	line-height: 150%;
 }
@@ -29,6 +30,7 @@ body {
 }
 .move_info {
 	align-self: flex-start;
+    /*左浮动 >150*/
 	width: 150px;
 }
 .steps {
@@ -37,7 +39,11 @@ body {
 }
 .info{
 	width: 90px;
+    /*棋盘走法进度条长度*/
 	height: 200px;
+    /*overflow-y 决定如何处理溢出的内容:
+    隐藏溢出内容（hidden），或者显示滚动条（scroll），
+    或者直接显示溢出内容（visible），或者让浏览器来处理（auto）。*/
 	overflow-y: scroll;
 }
 .bill_box {
@@ -49,9 +55,10 @@ body {
 	cursor:pointer;
 	text-align:left
 }
+/*里面的颜色*/
 .bill_box li:hover {
 	cursor:pointer;
-	background: #C6A577;
+	background: red;
 }
 .bill_box li:active {
 	cursor:pointer;

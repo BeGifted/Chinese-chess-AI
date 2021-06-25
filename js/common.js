@@ -81,6 +81,7 @@ window.onload = function(){
 			com.get("info").innerHTML="";
 			play.depth = 4;
 			play.init();
+			//先手： play.AIPlay();
 		}
 	})
 	//人人对战
@@ -106,10 +107,10 @@ window.onload = function(){
 			play.depth = parseInt(Math.random()*2+3, 10);
 			play.init();
 			play.my = -1;
-			var interval = setInterval(function(){
+			const interval = setInterval(function () {
 				play.AIPlay();
 				console.log(play.flag);
-				if(play.flag){
+				if (play.flag) {
 					console.log(1);
 					clearInterval(interval);
 				}
