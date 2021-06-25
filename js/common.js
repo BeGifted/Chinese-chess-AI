@@ -66,6 +66,7 @@ window.onload = function(){
 			com.init();
 			com.get("chessRight").style.display = "block";
 			com.get("moveInfo").style.display = "none";
+			com.get("info").style.display = "none";
 			bill.init();
 		}
 	})

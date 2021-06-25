@@ -6,7 +6,7 @@ AI.historyTable = {};		//历史表
 AI.init = function (pace) {
 	AI.move;
 	var initTime = new Date().getTime();
-	AI.treeDepth = play.depth || 4;
+	AI.treeDepth = 4;
 
 	AI.number = 0;
 	AI.setHistoryTable.lenght = 0;
@@ -14,7 +14,7 @@ AI.init = function (pace) {
 	var val = AI.getAlphaBeta(-99999, 99999, AI.treeDepth, com.arr2Clone(play.map), play.my);
 	//var val = AI.iterativeSearch(com.arr2Clone(play.map),play.my)
 	if (!val || val.value == -8888) {
-		AI.treeDepth = 2;
+		AI.treeDepth = 4;
 		val = AI.getAlphaBeta(-99999, 99999, AI.treeDepth, com.arr2Clone(play.map), play.my);
 	}
 	//var val = AI.iterativeSearch(com.arr2Clone(play.map),play.my);
@@ -193,7 +193,7 @@ AI.evaluate = function (map, my) {
 			}
 		}
 	}
-	val+=Math.floor(Math.random()*10);  //让AI走棋增加随机元素
+	//val+=Math.floor(Math.random()*10);  //让AI走棋增加随机元素
 	AI.number++;
 	return val * my;
 }

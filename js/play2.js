@@ -222,9 +222,9 @@ play2.getClickMan = function (e){
 play2.showWin = function (my){
 	play2.isPlay = false;
 	if (my===1){
-		alert("恭喜你你赢了🎉🎉🎉");
+		alert("恭喜红方赢了🎉🎉🎉");
 	}else{
-		alert("很遗憾你输了😢😢😢");
+		alert("恭喜黑方赢了🎉🎉🎉");
 	}
 	play2.flag = true;
 }
